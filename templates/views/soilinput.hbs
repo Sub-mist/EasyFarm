@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>farmEasy</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        #imagePreview {
+            max-width: 100%;
+            max-height: 300px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen bg-gray-100" style="background-image: url('/images/background1.jpg');">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 text-white shadow-sm">
+        <div class="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+            <div class="text-xl font-bold">
+                farmEasy
+            </div>
+            <nav class="hidden space-x-4 md:flex">
+                <a href="/home" class="text-gray-300 hover:text-gray-100 transition-colors">
+                    Home
+                </a>
+                <a class="text-gray-300 hover:text-gray-100 transition-colors" href="/services">
+                    Services
+                </a>
+                <a href="/aboutus" class="text-gray-300 hover:text-gray-100 transition-colors">
+                    About Us
+                </a>
+                <div>
+                    {{userName}}
+                </div>
+                {{#unless signOutBtn}}
+                <a class="text-gray-300 hover:text-gray-100 transition-colors" href="/logout">
+                    Sign out
+                </a>
+                {{/unless}}
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center py-16">
+        <div class="w-full max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold">Soil Analysis</h1>
+                <p class="text-gray-500">Optimize your crop growth with a detailed soil analysis.</p>
+            </div>
+            <form id="soilAnalysisForm" action="/soil" method="POST" onsubmit="return validateForm()">
+                <div class="grid grid-cols-2 gap-8">
+                    <!-- Temperature -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium" for="temperature">Temperature</label>
+                        <input class="w-full rounded-md border px-3 py-2" id="temperature" name="temperature" placeholder="Temperature in °C" required type="number" min="0">
+                    </div>
+                    <!-- Humidity -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium" for="humidity">Humidity</label>
+                        <input class="w-full rounded-md border px-3 py-2" id="humidity" name="humidity" placeholder="Humidity in %" required type="number" min="0" max="100">
+                    </div>
+                    <!-- Rainfall -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium" for="rainfall">Rainfall</label>
+                        <input class="w-full rounded-md border px-3 py-2" id="rainfall" name="rainfall" placeholder="Rainfall in mm" required type="number" min="0">
+                    </div>
+                    <!-- Nitrogen -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium" for="nitrogen">Nitrogen (N)</label>
+                        <input class="w-full rounded-md border px-3 py-2" id="nitrogen" name="nitrogen" placeholder="N in ppm" required type="number" min="0">
+                    </div>
+                    <!-- Phosphorus -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium" for="phosphorus">Phosphorus (P)</label>
+                        <input class="w-full rounded-md border px-3 py-2" id="phosphorus" name="phosphorus" placeholder="P in ppm" required type="number" min="0">
+                    </div>
+                    <!-- Potassium -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium" for="potassium">Potassium (K)</label>
+                        <input class="w-full rounded-md border px-3 py-2" id="potassium" name="potassium" placeholder="K in ppm" required type="number" min="0">
+                    </div>
+                    <!-- pH Level -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium" for="ph">pH Level</label>
+                        <input class="w-full rounded-md border px-3 py-2" id="ph" name="ph" placeholder="pH" step="0.1" required type="number" min="0" max="14">
+                    </div>
+                    <!-- Information -->
+                    <div class="col-span-2 text-sm text-gray-500">
+                        Knowing the N-P-K ratio and pH level of your soil is crucial for understanding its fertility and selecting the right crops and fertilizers. This information will help you maximize your yield and ensure the long-term health of your soil.
+                    </div>
+                </div>
+                <div class="mt-8 text-center" >
+                    <button class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-green-500 text-white hover:bg-green-600 px-4 py-2 w-full" type="submit" style="background-color: #73CC1A;">
+                        Submit Soil Analysis
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    {{>footer}}
+
+    <script>
+        function validateForm() {
+            var temperature = document.getElementById('temperature').value;
+            var humidity = document.getElementById('humidity').value;
+            var rainfall = document.getElementById('rainfall').value;
+            var nitrogen = document.getElementById('nitrogen').value;
+            var phosphorus = document.getElementById('phosphorus').value;
+            var potassium = document.getElementById('potassium').value;
+            var ph = document.getElementById('ph').value;
+
+            if (temperature === '' || humidity === '' || rainfall === '' || nitrogen === '' || phosphorus === '' || potassium === '' || ph === '') {
+                alert('Please fill all the fields');
+                return false;
+            }
+
+            // Additional validation logic if needed
+
+            // If all validations pass, form will submit
+            return true;
+        }
+    </script>
+</body>
+
+</html>

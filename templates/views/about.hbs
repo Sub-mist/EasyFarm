@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>farmEasy</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="" style="background-image: url('/images/background1.jpg');">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 text-white shadow-sm">
+    <div class="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+      <div class="text-xl font-bold">
+        farmEasy
+      </div>
+      <nav class="hidden space-x-4 md:flex">
+        <a href="/" class="text-gray-300 hover:text-gray-100 transition-colors">
+          Home
+        </a>
+        <a href="/about" class="text-gray-300 hover:text-gray-100 transition-colors">
+          About Us
+        </a>
+      </nav>
+    </div>
+  </header>
+  {{>devinfo}}
+  <footer class="fixed bottom-0 left-0 right-0 bg-gray-900 text-white py-4 mt-auto w-full">
+    <div class="container mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-sm">© 2023 farmEasy. All rights reserved.</p>
+      <nav class="space-x-4 mt-4 md:mt-0">
+        <a href="/privacypolicy" class="text-gray-400 hover:text-gray-300 transition-colors">
+          Privacy Policy
+        </a>
+        <a class="text-gray-400 hover:text-gray-300 transition-colors" href="/tandc">
+          Terms of Service
+        </a>
+        <a class="text-gray-400 hover:text-gray-300 transition-colors" href="/contect">
+          Contact Us
+        </a>
+      </nav>
+    </div>
+  </footer>
+</body>
+
+</html>

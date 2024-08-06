@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>farmEasy</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        #imagePreview {
+            max-width: 100%;
+            max-height: 300px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .custom-button {
+            background-color: #73CC1A;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen" style="background-image: url('/images/background1.jpg'); display: flex; align-items: center;padding:100px; justify-content: center;">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 text-white shadow-sm">
+        <div class="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+            <div class="text-xl font-bold">
+                farmEasy
+            </div>
+            <nav class="hidden space-x-4 md:flex">
+                <a href="/home" class="text-gray-300 hover:text-gray-100 transition-colors">Home</a>
+                <a href="/services" class="text-gray-300 hover:text-gray-100 transition-colors">Services</a>
+                <a href="/aboutus" class="text-gray-300 hover:text-gray-100 transition-colors">About Us</a>
+                <div>
+                    {{userName}}
+                </div>
+                {{#unless signOutBtn}}
+                <a href="/logout" class="text-gray-300 hover:text-gray-100 transition-colors">Sign out</a>
+                {{/unless}}
+            </nav>
+        </div>
+    </header>
+    <main class="container mx-auto p-8 bg-white"style="border-radius:7px;height: 500px;min-height: 80vh;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+        <h2 class="text-2xl font-semibold mb-8 text-center" style="font-weight: bolder;font-size: xxx-large;">Weather Charts</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" style="
+    height: 500px;
+">
+            <div class="w-full md:w-full p-4">
+                <form id="chartForm" class="space-y-4">
+                    <div>
+                        <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+                        <input type="text" id="location" name="location" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label for="parameter" class="block text-sm font-medium text-gray-700">Parameter</label>
+                        <select id="parameter" name="parameter" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="temperature">Temperature</option>
+                            <option value="humidity">Humidity</option>
+                            <option value="windSpeed">Wind Speed</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="time_interval" class="block text-sm font-medium text-gray-700">Time Interval</label>
+                        <select id="time_interval" name="time_interval" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="hour">Hour</option>
+                            <option value="day">Day</option>
+                            <option value="month">Month</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full text-white py-2 rounded-md hover:bg-green-600 transition custom-button">Generate Chart</button>
+                </form>
+            </div>
+            <div class="w-full md:w-full p-4">
+                <h2 class="text-xl font-semibold mb-4 text-center">Weather Graph</h2>
+                <div class="w-full h-full">
+                    <canvas id="weatherChart" class="w-full h-full"></canvas>
+                </div>
+                <div id="chartLabels" class="mt-4 text-center">
+                    <!-- Labels will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer placeholder -->
+    {{>footer}}
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let weatherChart;
+
+        document.getElementById('chartForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const location = document.getElementById('location').value;
+            const parameter = document.getElementById('parameter').value;
+            const time_interval = document.getElementById('time_interval').value;
+
+            try {
+                const response = await axios.post('/emonitor', { location, parameter, time_interval });
+                const { labels, values } = response.data;
+
+                const ctx = document.getElementById('weatherChart').getContext('2d');
+
+                // Destroy the existing chart instance if it exists
+                if (weatherChart) {
+                    weatherChart.destroy();
+                }
+
+                // Create a new chart instance
+                weatherChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: parameter,
+                            data: values,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Time'
+                                }
+                            },
+                            y: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: parameter
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error generating chart:', error.message);
+                alert(`Failed to generate chart: ${error.message}`);
+            }
+        });
+    </script>
+</body>
+
+</html>

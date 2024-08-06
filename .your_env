@@ -1,0 +1,7 @@
+SECRET_KEY = "your secret key"
+DB_NAME = easyFarmDatabase
+PORT = 8000
+WHEATHER_API_KEY = "Your wheather api key"
+GOOGLE_CLIENT_ID = "Your GOOGLE_CLIENT_SECRET id"
+GOOGLE_CLIENT_SECRET = "your GOOGLE_CLIENT_SECRET key"
+SESSION_SECRET = "Your key"
