@@ -42,7 +42,8 @@ Usage:
 -Use the Crop Recommendation feature by providing inputs for potassium, temperature, humidity, rainfall, nitrogen, phosphorus, and pH level.
 -Log in or register to access personalized features.
 
-File Structure:
+## File Structure:
+```plaintext
 EasyFarm/
 ├── ai_model/
 │   ├── datasets/
@@ -93,9 +94,13 @@ EasyFarm/
 │       ├── soilinput.hbs
 │       └── tandc.hbs
 ├── .env
+├── .gitignore
 ├── package-lock.json
 ├── package.json
 └── README.txt
+
+```
+
 
 Contributing:
 -Fork the repository.
