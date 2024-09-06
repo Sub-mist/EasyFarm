@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>farmEasy</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        #imagePreview {
+            max-width: 100%;
+            max-height: 300px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen"
+    style="background-image: url('/images/background1.jpg');display: flex;align-items: center;justify-content: center;">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 text-white shadow-sm">
+        <div class="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+            <div class="text-xl font-bold">
+                farmEasy
+            </div>
+            <nav class="hidden space-x-4 md:flex">
+                <a href="/home" class="text-gray-300 hover:text-gray-100 transition-colors">
+                    Home
+                </a>
+                <a class="text-gray-300 hover:text-gray-100 transition-colors" href="/services">
+                    Services
+                </a>
+                <a href="/aboutus" class="text-gray-300 hover:text-gray-100 transition-colors">
+                    About Us
+                </a>
+                <div>
+                    {{userName}}
+                </div>
+                {{#unless signOutBtn}}
+                <a class="text-gray-300 hover:text-gray-100 transition-colors" href="/logout">
+                    Sign out
+                </a>
+                {{/unless}}
+            </nav>
+        </div>
+    </header>
+
+
+
+
+  <div class="container bg-gray-100 dark:bg-gray-800 p-6">
+    <h2 class="text-xl font-bold mb-4" style="text-align: center;">Insights</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">
+            Most Profitable Crops
+          </h3>
+        </div>
+        <div class="p-6">
+          <p>Based on the current prices, the most profitable crops are:</p>
+          <ul class="list-disc pl-6 mt-2">
+            <li>Soybeans</li>
+            <li>Apples</li>
+            <li>Tomatoes</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Price Fluctuations</h3>
+        </div>
+        <div class="p-6">
+          <p>The crops with the largest price fluctuations in the last month are:</p>
+          <ul class="list-disc pl-6 mt-2">
+            <li>Corn (+3.2%)</li>
+            <li>Wheat (+2.1%)</li>
+            <li>Potatoes (-2.8%)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Recommendations</h3>
+        </div>
+        <div class="p-6">
+          <p>Based on the current market conditions, we recommend considering the following crops:</p>
+          <ul class="list-disc pl-6 mt-2">
+            <li>Soybeans - High profitability and stable prices</li>
+            <li>Tomatoes - Potential for growth due to increasing demand</li>
+            <li>Potatoes - Opportunity to capitalize on price dip and</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <!-- Footer placeholder -->
+    {{>footer}}
+
+</body>
+
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>farmEasy</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        #imagePreview {
+            max-width: 100%;
+            max-height: 300px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen"
+    style="background-image: url('/images/background1.jpg');display: flex;align-items: center;justify-content: center;">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 text-white shadow-sm">
+        <div class="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+            <div class="text-xl font-bold">
+                farmEasy
+            </div>
+            <nav class="hidden space-x-4 md:flex">
+                <a href="/home" class="text-gray-300 hover:text-gray-100 transition-colors">
+                    Home
+                </a>
+                <a class="text-gray-300 hover:text-gray-100 transition-colors" href="/services">
+                    Services
+                </a>
+                <a href="/aboutus" class="text-gray-300 hover:text-gray-100 transition-colors">
+                    About Us
+                </a>
+                <div>
+                    {{userName}}
+                </div>
+                {{#unless signOutBtn}}
+                <a class="text-gray-300 hover:text-gray-100 transition-colors" href="/logout">
+                    Sign out
+                </a>
+                {{/unless}}
+            </nav>
+        </div>
+    </header>
+    <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-3xl" data-id="1" data-v0-t="card" style="background-color: white;">
+        <div class="flex flex-col space-y-1.5 p-6" data-id="2">
+            <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight" data-id="3" style="font-size: x-large; font-weight: bolder; text-align: center; padding-bottom: 15px;">
+                Soil Analysis Report
+            </h3>
+            <p class="text-sm text-muted-foreground" data-id="4">Recommendations for Optimal Plant Growth</p>
+        </div>
+        <div class="p-6 grid gap-6" data-id="5">
+            <div class="grid md:grid-cols-2 gap-4" data-id="6">
+                <div class="grid gap-2" data-id="7">
+                    <div class="font-semibold" data-id="8">Nitrogen (N)</div>
+                    <div class="flex items-center gap-2" data-id="9">
+                        <div aria-valuemax="100" aria-valuemin="0" role="progressbar" data-state="indeterminate" data-max="100" class="relative h-2 w-full overflow-hidden rounded-full bg-primary/20 flex-1" data-id="10" style="background-color: #beedbe;">
+                            <div data-state="indeterminate" data-max="100" class="h-full w-full flex-1 bg-primary transition-all" style="background-color: #73CC1A;transform: translateX(-{{sliderN}}%);"></div>
+                        </div>
+                        <span data-id="11" id="valueN">{{valueN}}%</span>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" data-id="12" id="descN">Loading...</p>
+                </div>
+                <div class="grid gap-2" data-id="13">
+                    <div class="font-semibold" data-id="14">Phosphorus (P)</div>
+                    <div class="flex items-center gap-2" data-id="15">
+                        <div aria-valuemax="100" aria-valuemin="0" role="progressbar" data-state="indeterminate" data-max="100" class="relative h-2 w-full overflow-hidden rounded-full bg-primary/20 flex-1" data-id="16" style="background-color: #beedbe;">
+                            <div data-state="indeterminate" data-max="100" class="h-full w-full flex-1 bg-primary transition-all" style="background-color: #73CC1A;transform: translateX(-{{sliderP}}%);"></div>
+                        </div>
+                        <span data-id="17" id="valueP">{{valueP}}%</span>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" data-id="18" id="descP">Loading...</p>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4" data-id="19">
+                <div class="grid gap-2" data-id="20">
+                    <div class="font-semibold" data-id="21">Potassium (K)</div>
+                    <div class="flex items-center gap-2" data-id="22">
+                        <div aria-valuemax="100" aria-valuemin="0" role="progressbar" data-state="indeterminate" data-max="100" class="relative h-2 w-full overflow-hidden rounded-full bg-primary/20 flex-1" data-id="23" style="background-color: #beedbe;">
+                            <div data-state="indeterminate" data-max="100" class="h-full w-full flex-1 bg-primary transition-all" style="background-color: #73CC1A;transform: translateX(-{{sliderK}}%);"></div>
+                        </div>
+                        <span data-id="24" id="valueK">{{valueK}}%</span>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" data-id="25" id="descK">Loading...</p>
+                </div>
+                <div class="grid gap-2" data-id="26">
+                    <div class="font-semibold" data-id="27">Soil pH Level</div>
+                    <div class="flex items-center gap-2" data-id="28">
+                        <div aria-valuemax="14" aria-valuemin="0" role="progressbar" data-state="indeterminate" data-max="14" class="relative h-2 w-full overflow-hidden rounded-full bg-primary/20 flex-1" data-id="29" style="background-color: #beedbe;">
+                            <div data-state="indeterminate" data-max="14" class="h-full w-full flex-1 bg-primary transition-all" style="background-color: #73CC1A;transform: translateX(-{{sliderPH}}%);"></div>
+                        </div>
+                        <span data-id="30" id="valuePH">{{valuePH}}</span>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" data-id="31" id="descPH">Loading...</p>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4" data-id="32">
+                <div class="col-span-2 grid gap-2" data-id="33">
+                    <div class="font-semibold" data-id="34">Overall Soil Health</div>
+                    <div class="flex items-center gap-2" data-id="35">
+                        <div aria-valuemax="100" aria-valuemin="0" role="progressbar" data-state="indeterminate" data-max="100" class="relative h-2 w-full overflow-hidden rounded-full bg-primary/20 flex-1" data-id="36" style="background-color: #beedbe;">
+                            <div data-state="indeterminate" data-max="100" class="h-full w-full flex-1 bg-primary transition-all" style="background-color: #73CC1A;transform: translateX(-{{averageSlider}}%);"></div>
+                        </div>
+                        <span data-id="37" id="averageValue">{{averageValue}}%</span>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" data-id="38" id="descOverall">Loading...</p>
+                </div>
+            </div>
+            <div class="grid gap-2" data-id="39">
+                <div class="font-semibold" data-id="40">Recommendations : "{{recommendation}}"</div>
+                <ul class="grid gap-2 text-sm text-gray-500 dark:text-gray-400" data-id="41" id="recommendations">
+                    <li data-id="42">Loading...</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Footer placeholder -->
+    {{>footer}}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const valueN = parseFloat(document.getElementById('valueN').textContent);
+            const valueP = parseFloat(document.getElementById('valueP').textContent);
+            const valueK = parseFloat(document.getElementById('valueK').textContent);
+            const valuePH = parseFloat(document.getElementById('valuePH').textContent);
+            
+            const descN = document.getElementById('descN');
+            const descP = document.getElementById('descP');
+            const descK = document.getElementById('descK');
+            const descPH = document.getElementById('descPH');
+            const descOverall = document.getElementById('descOverall');
+            const recommendations = document.getElementById('recommendations');
+
+            function getDescription(value, type) {
+                if (type === 'N') {
+                    if (value < 30) return 'Nitrogen levels are very low. Consider using a nitrogen-rich fertilizer.';
+                    if (value < 40) return 'Nitrogen levels are adequate for planting. Supplement with additional nitrogen sources.';
+                    if (value < 70) return 'Nitrogen levels are ideal for most crops.';
+                    return 'Nitrogen levels are high. Monitor for potential excess.';
+                }
+                if (type === 'P') {
+                    if (value < 20) return 'Phosphorus levels are very low. Use a phosphorus-rich fertilizer.';
+                    if (value < 40) return 'Phosphorus levels are within the optimal range.';
+                    if (value < 50) return 'Phosphorus levels are at the maximum beneficial level.';
+                    return 'Phosphorus levels are high. Avoid over-fertilization.';
+                }
+                if (type === 'K') {
+                    if (value < 120) return 'Potassium levels are very low. Use a potassium-rich fertilizer.';
+                    if (value < 170) return 'Potassium levels are within the optimal range for soils with a CEC of 10 meq/100g.';
+                    if (value < 250) return 'Potassium levels are adequate. No additional potassium is needed.';
+                    return 'Potassium levels are high. Avoid over-fertilization.';
+                }
+                if (type === 'PH') {
+                    if (value < 5.5) return 'Soil pH is very acidic. Consider liming to increase pH.';
+                    if (value < 6.5) return 'Soil pH is slightly acidic. Most crops will grow well.';
+                    if (value < 7.5) return 'Soil pH is neutral. Ideal for most crops.';
+                    if (value < 8.5) return 'Soil pH is slightly alkaline. Monitor and adjust if necessary.';
+                    return 'Soil pH is very alkaline. Consider using acidifying amendments.';
+                }
+            }
+
+            descN.textContent = getDescription(valueN, 'N');
+            descP.textContent = getDescription(valueP, 'P');
+            descK.textContent = getDescription(valueK, 'K');
+            descPH.textContent = getDescription(valuePH, 'PH');
+
+            const averageValue = ((valueN + valueP + valueK) / 3).toFixed(2);
+            document.getElementById('averageValue').textContent = `${averageValue}%`;
+            descOverall.textContent = 'Overall soil health based on the average of N, P, and K levels.';
+
+            recommendations.innerHTML = `
+                <li>- Incorporate organic matter, such as compost or well-rotted manure, to improve soil structure and nutrient balance.</li>
+                <li>- Apply a balanced, slow-release fertilizer to gradually increase phosphorus levels while maintaining nitrogen and potassium.</li>
+                <li>- Consider planting cover crops or green manures to fix nitrogen and improve overall soil health.</li>
+                <li>- Regularly test the soil to monitor changes and make adjustments as needed.</li>
+            `;
+        });
+    </script>
+</body>
+
+</html>

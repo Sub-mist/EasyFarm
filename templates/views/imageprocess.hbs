@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>farmEasy - Disease Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        #imagePreview {
+            max-width: 100%;
+            max-height: 300px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen" style="background-image: url('/images/background1.jpg');">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 text-white shadow-sm">
+        <div class="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+            <div class="text-xl font-bold">
+                farmEasy
+            </div>
+            <nav class="hidden space-x-4 md:flex">
+                <a href="/home" class="text-gray-300 hover:text-gray-100 transition-colors">
+                    Home
+                </a>
+                <a class="text-gray-300 hover:text-gray-100 transition-colors" href="/services">
+                    Services
+                </a>
+                <a href="/aboutus" class="text-gray-300 hover:text-gray-100 transition-colors">
+                    About Us
+                </a>
+                <div>
+                    {{userName}}
+                </div>
+                {{#unless signOutBtn}}
+                <a class="text-gray-300 hover:text-gray-100 transition-colors" href="/logout">
+                    Sign out
+                </a>
+                {{/unless}}
+            </nav>
+        </div>
+    </header>
+    <main class="flex-1 pt-16 flex justify-center items-center">
+        <div class="max-w-md w-full space-y-6 p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
+            <div class="space-y-2 text-center">
+                <h1 class="text-3xl font-bold tracking-tight">Crop Disease Detection</h1>
+                <p class="text-gray-500 dark:text-gray-400">
+                    Upload an image of your crop affected with a disease, and our AI will detect the disease and provide
+                    the name and cure.
+                </p>
+            </div>
+            <div class="flex flex-col items-center space-y-4">
+                <!-- Image preview -->
+                <img id="imagePreview" class="hidden w-full max-w-[300px] h-auto object-cover rounded-md"
+                    alt="Crop Image Preview">
+
+                <!-- Upload form -->
+                <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data"
+                    class="w-full max-w-[300px] h-auto">
+                    <label for="fileInput"
+                        class="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 w-full max-w-[300px] h-auto text-lg cursor-pointer">
+                        Choose File
+                    </label>
+                    <input id="fileInput" type="file" name="cropImage" class="hidden" accept="image/*" />
+                    {{!-- <button type="submit"
+                        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 w-full mt-4"
+                        style="color: white;background-color: #73cc1a;">
+                        Upload
+                    </button> --}}
+                    <m type="submit"
+                        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 w-full mt-4"
+                        style="color: white;background-color: #73cc1a;">
+                        Coming soon
+                    </m>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer placeholder -->
+    {{>footer}}
+
+    <!-- JavaScript for image preview and file type validation -->
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function (event) {
+            var file = event.target.files[0];
+            var validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!validImageTypes.includes(file.type)) {
+                alert('Please select a file with one of the following extensions: .jpg, .jpeg, .png, .gif');
+                event.target.value = ''; // Clear the file input
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                output.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', function (event) {
+            var fileInput = document.getElementById('fileInput');
+            if (!fileInput.files.length) {
+                alert('Please choose an image.');
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+
+</html>

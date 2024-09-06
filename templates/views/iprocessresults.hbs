@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>farmEasy</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .image-container {
+            height: 500px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            height: 100%;
+            width: auto;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen" style="background-image: url('/images/background1.jpg'); display: flex; justify-content: center; align-items: center;">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 text-white shadow-sm">
+        <div class="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+            <div class="text-xl font-bold">
+                farmEasy
+            </div>
+            <nav class="hidden space-x-4 md:flex">
+                <a href="/home" class="text-gray-300 hover:text-gray-100 transition-colors">Home</a>
+                <a class="text-gray-300 hover:text-gray-100 transition-colors" href="/services">Services</a>
+                <a href="/aboutus" class="text-gray-300 hover:text-gray-100 transition-colors">About Us</a>
+                <div>{{userName}}</div>
+                {{#unless signOutBtn}}
+                <a class="text-gray-300 hover:text-gray-100 transition-colors" href="/logout">Sign out</a>
+                {{/unless}}
+            </nav>
+        </div>
+    </header>
+
+    <main class="container flex flex-col items-center p-8" style="
+    background-color: white;
+    padding: 40px;
+">
+        <h1 class="text-4xl font-bold text-gray-900 mb-8">Detected Disease from Uploaded Image</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden image-container">
+                <img src="{{processedImage}}" alt="Uploaded Image" class="object-cover">
+            </div>
+            <div class="bg-white rounded-lg shadow-lg p-6 space-y-4">
+                <h2 class="text-2xl font-bold">Disease: {{diseaseName}}</h2>
+                <p class="text-gray-700">{{diseaseInfo}}</p>
+                <h3 class="text-xl font-bold">Recommended Cure:</h3>
+                <p class="text-gray-700">{{recommendedCure}}</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer placeholder -->
+    {{>footer}}
+
+    <!-- JavaScript for image preview -->
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function (event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                output.classList.remove('hidden');
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
+    </script>
+</body>
+
+</html>

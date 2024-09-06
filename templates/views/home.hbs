@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>farmEasy</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="flex flex-col min-h-screen" style="background-image: url('/images/background1.jpg');">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 text-white shadow-sm">
+    <div class="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+      <div class="text-xl font-bold">
+        farmEasy
+      </div>
+      <nav class="hidden space-x-4 md:flex">
+        <a href="/home" class="text-gray-300 hover:text-gray-100 transition-colors">
+          Home
+        </a>
+        <a class="text-gray-300 hover:text-gray-100 transition-colors" href="/services">
+          Services
+        </a>
+        <a href="/aboutus" class="text-gray-300 hover:text-gray-100 transition-colors">
+          About Us
+        </a>
+        <div>
+          {{userName}}
+        </div>
+        {{#unless signOutBtn}}
+        <a class="text-gray-300 hover:text-gray-100 transition-colors" href="/logout">
+          Sign out
+        </a>
+        {{/unless}}
+      </nav>
+    </div>
+  </header>
+  <main class="flex-1 pt-16">
+    <section class="bg-gray-100 py-10">
+      <div class="container mx-auto px-4 md:px-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center " style="display: flex;">
+          <div>
+            <h1 class="text-3xl font-bold mb-4">Streamline Your Farming with farmEasy</h1>
+            <p class="text-gray-600 mb-8">
+              farmEasy is a comprehensive platform designed to simplify the lives of farmers. With our intuitive
+              tools and features, you can manage your farm operations more efficiently, from crop planning to
+              inventory tracking.
+            </p>
+            {{!-- {{#unless isLoggedIn}} --}}
+            <a class="inline-flex items-center justify-center px-6 py-3 text-white font-medium rounded-md hover:bg-green-600 transition-colors"
+              href="/services" style="background-color: #73cc1a;">
+              Use Services
+            </a>
+            {{!-- {{/unless}} --}}
+          </div>
+          <div class="hidden md:block">
+            <img src="/images/background1.jpg" width="500" height="400" alt="farmEasy"
+              style="aspect-ratio: 500 / 400; object-fit: cover;" class="rounded-md" />
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-20">
+      <div class="container mx-auto px-4 md:px-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white rounded-md shadow-md p-6">
+            <h3 class="text-xl font-bold mb-4">Crop Planning</h3>
+            <p class="text-gray-600 mb-4">Plan your crop rotation and planting schedules with ease.</p>
+            <a class="text-green-500 font-medium hover:text-green-600 transition-colors" href="#">
+              Learn More
+            </a>
+          </div>
+          <div class="bg-white rounded-md shadow-md p-6">
+            <h3 class="text-xl font-bold mb-4">Inventory Tracking</h3>
+            <p class="text-gray-600 mb-4">Keep track of your farm's inventory, from seeds to equipment.</p>
+            <a href="#" class="text-green-500 font-medium hover:text-green-600 transition-colors">
+              Learn More
+            </a>
+          </div>
+          <div class="bg-white rounded-md shadow-md p-6">
+            <h3 class="text-xl font-bold mb-4">Weather Monitoring</h3>
+            <p class="text-gray-600 mb-4">
+              Stay informed about weather conditions to optimize your farming practices.
+            </p>
+            <a class="text-green-500 font-medium hover:text-green-600 transition-colors" href="#">
+              Learn More
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  {{>footer}}
+</body>
+
+</html>
