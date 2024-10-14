@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "idev": "cross-env IPV6_MODE=true node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/server.js -e js,hbs,css,env,py"
   },
@@ -13,7 +14,9 @@
   "dependencies": {
     "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
+    "clipboardy": "^4.0.0",
     "cookie-parser": "^1.4.6",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
