@@ -1,14 +1,15 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const axios = require('axios');
-const { spawn } = require('child_process');
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import axios from 'axios';
+import { spawn } from 'child_process';
+import User from "../model/userInfoSchema.js";
+import auth from '../middleware/auth.js';
+import upload from '../model/upImages.js';
+import passport from 'passport';
+import { DateTime } from 'luxon';
+
 const router = express.Router();
-const User = require("../model/userInfoSchema");
-const auth = require('../middleware/auth');
-const upload = require('../model/upImages');
-const passport = require('passport');
-const { DateTime } = require('luxon');
- 
+
 router.get('/auth/google',
     passport.authenticate('google', { scope: ['profile', 'email'] })
 );
@@ -20,13 +21,12 @@ router.get('/auth/google/callback',
             const token = await req.user.generateAuthToken();
 
             res.cookie("jwt", token, {
-              expires: new Date(Date.now() + 3000000),
-              httpOnly: true
+                expires: new Date(Date.now() + 3000000),
+                httpOnly: true
             });
-    
+
             res.redirect('/home');
-        }
-        catch (error) {
+        } catch (error) {
             console.log(error);
         }
     }
@@ -35,11 +35,11 @@ router.get('/auth/google/callback',
 router.get("/fail", (req, res) => {
     res.render("sessionout.hbs", {
         msg: "Something went wrong"
-    })
-})
+    });
+});
 
 router.get("/", (req, res) => {
-    console.log("client ip address is => " + req.ip);
+    console.log("client IP address is => " + req.ip);
     res.render('index.hbs', {
         isLoggedIn: false,
         signOutBtn: true
@@ -75,10 +75,10 @@ router.get("/services", auth, (req, res) => {
     res.render("services.hbs", {
         signOutBtn: false,
         userName: req.user.name
-    })
+    });
 });
 
-router.get("/contect", (req, res) => {
+router.get("/contact", (req, res) => {
     res.render("contactus.hbs");
 });
 
@@ -90,15 +90,15 @@ router.get("/tandc", (req, res) => {
     res.render("tandc.hbs");
 });
 
-router.get("/contect1",auth, (req, res) => {
+router.get("/contact1", auth, (req, res) => {
     res.render("contactus copy.hbs");
 });
 
-router.get("/privacypolicy1",auth, (req, res) => {
+router.get("/privacypolicy1", auth, (req, res) => {
     res.render("privacypolicy copy.hbs");
 });
 
-router.get("/tandc1",auth, (req, res) => {
+router.get("/tandc1", auth, (req, res) => {
     res.render("tandc copy.hbs");
 });
 
@@ -120,94 +120,67 @@ router.get("/soilsubmit", auth, (req, res) => {
     });
 });
 
-
-router.post('/emonitor',auth,  async (req, res) => {
+router.post('/emonitor', auth, async (req, res) => {
     const { location, parameter, time_interval } = req.body;
-  
+
     try {
-      // Make the API request to OpenWeatherMap
-      const response = await axios.get(`http://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${process.env.WHEATHER_API_KEY}&units=metric`);
-      const weatherData = response.data;
-   
-      // Extract the needed data 
-      const timestamps = weatherData.list.map(item => item.dt);
-      let values;
-  
-      switch (parameter) {
-        case 'temperature':
-          values = weatherData.list.map(item => item.main.temp);
-          break;
-        case 'humidity':
-          values = weatherData.list.map(item => item.main.humidity);
-          break;
-        case 'windSpeed':
-          values = weatherData.list.map(item => item.wind.speed);
-          break;
-        default:
-          values = [];
-      }
-  
-      let labels;
-      switch (time_interval) {
-        case 'hour':
-          labels = timestamps.map(ts => DateTime.fromMillis(ts * 1000).toFormat('HH:mm'));
-          break;
-        case 'day':
-          labels = timestamps.map(ts => DateTime.fromMillis(ts * 1000).toFormat('yyyy-MM-dd'));
-          break;
-        case 'month':
-          labels = timestamps.map(ts => DateTime.fromMillis(ts * 1000).toFormat('yyyy-MM'));
-          break;
-        default:
-          labels = [];
-      }
-  
-      res.json({
-        labels: labels,
-        values: values
-      });
+        const response = await axios.get(`http://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${process.env.WHEATHER_API_KEY}&units=metric`);
+        const weatherData = response.data;
+
+        const timestamps = weatherData.list.map(item => item.dt);
+        let values;
+
+        switch (parameter) {
+            case 'temperature':
+                values = weatherData.list.map(item => item.main.temp);
+                break;
+            case 'humidity':
+                values = weatherData.list.map(item => item.main.humidity);
+                break;
+            case 'windSpeed':
+                values = weatherData.list.map(item => item.wind.speed);
+                break;
+            default:
+                values = [];
+        }
+
+        let labels;
+        switch (time_interval) {
+            case 'hour':
+                labels = timestamps.map(ts => DateTime.fromMillis(ts * 1000).toFormat('HH:mm'));
+                break;
+            case 'day':
+                labels = timestamps.map(ts => DateTime.fromMillis(ts * 1000).toFormat('yyyy-MM-dd'));
+                break;
+            case 'month':
+                labels = timestamps.map(ts => DateTime.fromMillis(ts * 1000).toFormat('yyyy-MM'));
+                break;
+            default:
+                labels = [];
+        }
+
+        res.json({
+            labels: labels,
+            values: values
+        });
     } catch (error) {
-      console.error('Error fetching weather data:', error);
-      res.status(500).json({ error: 'Failed to fetch weather data' });
+        console.error('Error fetching weather data:', error);
+        res.status(500).json({ error: 'Failed to fetch weather data' });
     }
 });
-  
 
 router.post("/soil", auth, async (req, res) => {
-    // const api = process.env.WHEATHER_API_KEY;
-    // const city = req.body.city;
-
     let { nitrogen, phosphorus, potassium, ph, humidity, temperature, rainfall } = req.body;
 
-    const N = (parseFloat(nitrogen));
-    const P = (parseFloat(phosphorus));
-    const K = (parseFloat(potassium));
-    temperature = (parseFloat(temperature));
-    humidity = (parseFloat(humidity));
-    rainfall = (parseFloat(rainfall));
+    const N = parseFloat(nitrogen);
+    const P = parseFloat(phosphorus);
+    const K = parseFloat(potassium);
+    temperature = parseFloat(temperature);
+    humidity = parseFloat(humidity);
+    rainfall = parseFloat(rainfall);
     const pHValue = parseFloat(ph);
 
-    console.log(N);
-    console.log(P);
-    console.log(K);
-    console.log(temperature);
-    console.log(humidity);
-    console.log(potassium);
-
-
     try {
-        // console.log(api);
-        // console.log(city);
-        // const weatherResponse = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api}&units=metric`);
-        // const weatherData = weatherResponse.data;
-        // const temperature = weatherData.main.temp;
-        // const humidity = weatherData.main.humidity;
-        // // we nee api which can show rainfall as well it is avalible but not for all
-        // const rainfall = weatherData.rain ? weatherData.rain['1h'] || 0 : 0;
-        // console.log(rainfall); 
-        // console.log(humidity);
-        // console.log(temperature);
-
         const weightN = 0.3;
         const weightP = 0.3;
         const weightK = 0.3;
@@ -221,13 +194,7 @@ router.post("/soil", auth, async (req, res) => {
             return new Promise((resolve, reject) => {
                 const pythonProcess = spawn('python', [
                     '../easyFarm/src/python_scripts/predict_crop.py',
-                    N,          //data from user
-                    P,          //data from user
-                    K,          //data frpm user
-                    temperature,//data from api
-                    humidity,   //data from api
-                    pHValue,    //data from api
-                    rainfall    //data frpm api
+                    N, P, K, temperature, humidity, pHValue, rainfall
                 ]);
 
                 pythonProcess.stdout.on('data', (data) => {
@@ -263,7 +230,6 @@ router.post("/soil", auth, async (req, res) => {
     }
 });
 
-
 router.get("/price", auth, (req, res) => {
     res.render("price.hbs", {
         userName: req.user.name
@@ -271,34 +237,20 @@ router.get("/price", auth, (req, res) => {
 });
 
 router.get("/imageresult", auth, (req, res) => {
-    // function which will take the image path
-    // and return object contain the dname dinfo and dcure
-    // so that we can use the data to show the cure
-    // const processedData = processImage(req.user.imagePath);
     res.render("iprocessresults.hbs", {
         userName: req.user.name,
         processedImage: req.user.imagePath,
-        diseaseName: "",//processedData.dname,
-        diseaseInfo: "",//processedData.dinfo,
-        recommendedCure: ""// processedData.dcure
+        diseaseName: "", //processedData.dname,
+        diseaseInfo: "", //processedData.dinfo,
+        recommendedCure: "" //processedData.dcure
     });
 });
 
-// // I hve to use the model here 
-// const processImage = (imagePath) => {
-//     // using model
-
-
-//     return processedData;
-// };
-
-// Add upload route
 router.post('/upload', auth, upload.single('cropImage'), async (req, res) => {
     try {
         req.user.imagePath = "./images/" + req.file.filename;
         await req.user.save();
         res.status(200).redirect('/imageresult');
-        
     } catch (error) {
         console.error('Error uploading file:', error);
         res.status(400).send('Error uploading file');
@@ -334,17 +286,15 @@ router.post("/signin", async (req, res) => {
             const token = await user.generateAuthToken();
 
             res.cookie("jwt", token, {
-                expires: new Date(Date.now() + 3000000), 
-                httpOnly: true,
+                expires: new Date(Date.now() + 3000000),
+                httpOnly: true
             });
 
-            res.status(201);
-            res.redirect('/home');
+            res.redirect("/home");
         } else {
-            res.send("Invalid credentials");
+            res.send("Wrong Credentials");
         }
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
         res.status(400).send("Invalid credentials");
     }
 });
@@ -384,4 +334,4 @@ router.post("/signup", async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
