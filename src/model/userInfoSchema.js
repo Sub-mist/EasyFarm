@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const userSchema = new mongoose.Schema({
     googleId: {
@@ -12,12 +12,12 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true, 
-        unique: true, 
+        required: true,
+        unique: true,
     },
     password: {
         type: String,
-        //required: true, 
+        //required: true,
     },
     confirmPassword: {
         type: String,
@@ -25,40 +25,39 @@ const userSchema = new mongoose.Schema({
     imagePath: {
         type: String,
         default: "",
-        required:false 
+        required: false,
     },
     tokens: [{
         token: {
             type: String,
-            required: true, 
+            required: true,
         }
     }]
 });
 
+// Generating Auth Token
 userSchema.methods.generateAuthToken = async function() {
     try {
         const token = jwt.sign({ _id: this._id.toString() }, process.env.SECRET_KEY);
         
-        this.tokens = this.tokens.concat({ token: token });
-        
+        this.tokens = this.tokens.concat({ token });
         await this.save();
         
         return token;
     } catch (error) {
-        res.send("the error part" + error);
-        console.log("the error part" + error); 
+        console.error("Error generating token:", error);
     }
-}
+};
 
+// Password hashing before saving
 userSchema.pre("save", async function(next) {
     if (this.isModified("password")) {
         this.password = await bcrypt.hash(this.password, 12);
-        
         this.confirmPassword = undefined;
     }
     next();
-})
+});
 
-const User = new mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
-module.exports = User;
+export default User;

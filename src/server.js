@@ -1,23 +1,27 @@
-require('dotenv').config();
+import 'dotenv/config';
+import express from "express";
+import path from "path";
+import { fileURLToPath } from 'url'; // This is needed to replace __dirname in ES6
+import hbs from "hbs";
+import cookieParser from 'cookie-parser';
+import axios from 'axios';
+import passport from 'passport';
+import session from 'express-session';
+import router from "./routers/userScreenRoute.js"; // Importing your router (notice the .js extension in ES6)
 
-const express = require("express");
-const path = require("path");
-const app = express();
-const hbs = require("hbs");
-const cookieParser = require('cookie-parser');
-const axios = require('axios');
-const router = require("./routers/userScreenRoute");
-const passport = require('passport');
-const session = require('express-session');
+import './goauth/passport.js';
+import './database/databaseConnection.js';
 
-require('./goauth/passport');
-require("./database/databaseConnection");
-  
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const static_path = path.join(__dirname, "../public");
 const templates_path = path.join(__dirname, "../templates/views");
 const parttials_path = path.join(__dirname, "../templates/parttials");
 
 const PORT = process.env.PORT || 8000;
+
+const app = express();
 
 app.set("view engine", "hbs");
 app.set("views", templates_path);
@@ -41,30 +45,29 @@ app.use(router);
 
 app.listen(PORT, async () => {
     console.log("\n\n\nserver is running at :");
-    if(process.env.IPV6_MODE === 'true') {
+    if (process.env.IPV6_MODE === 'true') {
         const publicIPv6 = await getPublicIPv6();
-        if(publicIPv6) {
+        if (publicIPv6) {
             const url = `http://[${publicIPv6}]:${PORT}/`;
             console.log(url);
             openWebApp(url);
-            const clipboardyModule = await import('clipboardy');
-            const clipboardy = clipboardyModule.default;
+            const { default: clipboardy } = await import('clipboardy');
             clipboardy.writeSync(url);
             console.log("URL copied to clipboard");
         } else {
-            console.log("Could not retrive IPv6, falling back to localhost");
+            console.log("Could not retrieve IPv6, falling back to localhost");
             openWebApp(`http://localhost:${PORT}/`);
-        } 
+        }
     } else {
-        const url = `http://localhost:${PORT}/`
+        const url = `http://localhost:${PORT}/`;
         console.log(url);
         openWebApp(url);
     }
 });
 
 const openWebApp = async (url) => {
-    const open = await import('open');
-    open.default(url);
+    const { default: open } = await import('open');
+    open(url);
 }
 
 const getPublicIPv6 = async () => {

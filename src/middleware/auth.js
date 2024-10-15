@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const User = require('../model/userInfoSchema');
+import jwt from 'jsonwebtoken';
+import User from '../model/userInfoSchema.js';
 
 const auth = async (req, res, next) => {
     try {
@@ -11,13 +11,13 @@ const auth = async (req, res, next) => {
         req.user = user;
 
         next();
-        
+
     } catch (error) {
         res.status(401);
         res.render("sessionout.hbs", {
             msg: "Session ends, go back to home"
         });
     }
-}
+};
 
-module.exports = auth;
+export default auth;
